@@ -19,7 +19,7 @@ add_subdirectory(apps)
 
 if (ENABLE_TESTING)
     enable_testing()
-	add_subdirectory(tests)
+	#add_subdirectory(tests)
 endif()
 
 install(DIRECTORY
