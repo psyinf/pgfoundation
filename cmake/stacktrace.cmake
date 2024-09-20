@@ -5,7 +5,7 @@ if(USE_STACKTRACES AND (CMAKE_CXX_STANDARD EQUAL 23) )
 	add_definitions(-DUSE_STACKTRACES)
 	#only for gcc
 	IF (CMAKE_COMPILER_IS_GNUCXX)
-		SET(ADDITION_LIBS "stdc++exp" CACHE STRING "additional libraries")
+		SET(ADDITIONAL_LIBS "stdc++exp" CACHE STRING "additional libraries")
 	ENDIF()
 else()	
 	message("Not using stacktraces")

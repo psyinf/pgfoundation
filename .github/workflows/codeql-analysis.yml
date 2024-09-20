@@ -1,0 +1,55 @@
+name: "Code scanning - action"
+
+on:
+  push:
+    branches:
+      - develop
+      - master
+      - release/*
+  pull_request:
+  schedule:
+    - cron: '0 19 * * 1'
+  workflow_dispatch:
+  
+permissions:
+  contents: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref || github.run_id }}
+  cancel-in-progress: true
+
+jobs:
+  CodeQL-Build:
+
+    runs-on: ubuntu-latest
+    permissions:
+      security-events: write
+
+    steps:
+    - name: Setup LCOV
+      uses: hrishikesh-kadam/setup-lcov@v1    
+
+    - name: Checkout repository
+      uses: actions/checkout@v3
+    - name: Install Conan
+      id: conan
+      uses: turtlebrowser/get-conan@main
+      with:
+        version: 1.60.2
+    - name: Create default Conan profile
+      run: conan profile new default --detect    
+    - name: Conan profile update
+      run:  |
+            conan profile update conf.tools.system.package_manager:mode=install default
+            conan profile update conf.tools.system.package_manager:sudo=True default    
+    # Initializes the CodeQL tools for scanning.
+    - name: Initialize CodeQL
+      uses: github/codeql-action/init@v2
+
+    # Autobuild attempts to build any compiled languages  (C/C++, C#, or Java).
+    # If this step fails, then you should remove it and run the build manually (see below)
+    - name: Autobuild
+      uses: github/codeql-action/autobuild@v2
+
+    - name: Perform CodeQL Analysis
+      uses: github/codeql-action/analyze@v2

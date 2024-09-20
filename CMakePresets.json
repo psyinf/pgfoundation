@@ -192,48 +192,6 @@
       }
     }
   ],
-  "buildPresets": [
-    {
-      "name": "windows-msvc-debug-developer-mode",
-      "configurePreset": "windows-msvc-debug-developer-mode"
-    },
-    {
-      "name": "windows-msvc-release-developer-mode",
-      "configurePreset": "windows-msvc-release-developer-mode"
-    },
-    {
-      "name": "windows-msvc-debug-user-mode",
-      "configurePreset": "windows-msvc-debug-user-mode"
-    },
-    {
-      "name": "windows-msvc-release-user-mode",
-      "configurePreset": "windows-msvc-release-user-mode"
-    },
-    {
-      "name": "windows-clang-debug",
-      "configurePreset": "windows-clang-debug"
-    },
-    {
-      "name": "windows-clang-release",
-      "configurePreset": "windows-clang-release"
-    },
-    {
-      "name": "unixlike-gcc-debug",
-      "configurePreset": "unixlike-gcc-debug"
-    },
-    {
-      "name": "unixlike-gcc-release",
-      "configurePreset": "unixlike-gcc-release"
-    },
-    {
-      "name": "unixlike-clang-debug",
-      "configurePreset": "unixlike-clang-debug"
-    },
-    {
-      "name": "unixlike-clang-release",
-      "configurePreset": "unixlike-clang-release"
-    }
-  ],
   "testPresets": [
     {
       "name": "test-common",

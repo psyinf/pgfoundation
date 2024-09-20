@@ -1,4 +1,5 @@
 #pragma once
+#undef pgf
 #include <chrono>
 #include <condition_variable>
 #include <deque>
@@ -6,11 +7,7 @@
 #include <map>
 #include <mutex>
 #include <thread>
-#include <iostream>
-
 #include <future>
-
-#include <set>
 
 namespace pgf {
 using namespace std::chrono_literals;
