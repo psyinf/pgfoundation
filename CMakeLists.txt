@@ -14,7 +14,7 @@ include(cmake/setup_cpm.cmake)
 include(cmake/deps_cpm.cmake)
 
 
-add_subdirectory(libs)
+add_subdirectory(pgfoundation)
 add_subdirectory(apps)
 
 if (ENABLE_TESTING)
