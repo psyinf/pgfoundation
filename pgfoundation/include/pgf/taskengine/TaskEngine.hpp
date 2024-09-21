@@ -40,7 +40,6 @@ struct InternalTask
                 // move the work to a shared future
                 fut = std::async(std::launch::async, [work = std::move(task.work)]() {
                           // check the result of the work
-                          std::cout << "s";
                           bool res = work();
                           // if the job was successful, return true, and simply remove the task
                           if (res) { return std::make_pair(true, std::function<bool()>{}); }
