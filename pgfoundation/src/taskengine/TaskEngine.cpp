@@ -12,9 +12,9 @@ void pgf::TaskEngine::run()
             auto internal_task = std::move(_tasks.front());
 
             auto success = internal_task.execute();
-            if (!success && internal_task.task.reschedule_on_failure)
+            if (!success && internal_task.job.reschedule_on_failure)
             {
-                _timed_tasks[std::chrono::high_resolution_clock::now() + internal_task.task.reschedule_delay] =
+                _timed_tasks[std::chrono::high_resolution_clock::now() + internal_task.job.reschedule_delay] =
                     InternalTask{std::move(internal_task)};
             }
             _tasks.pop_front();
@@ -93,13 +93,13 @@ void pgf::TaskEngine::addInternalTask(InternalTask&& internal_task)
 {
     auto            now = std::chrono::high_resolution_clock::now();
     std::lock_guard lk(_mutex);
-    if (internal_task.task.starting_time_offset == std::chrono::high_resolution_clock::duration::zero())
+    if (internal_task.job.starting_time_offset == std::chrono::high_resolution_clock::duration::zero())
     {
         _tasks.emplace_back(std::move(internal_task));
         _task_available = true;
         _cv.notify_one();
     }
-    else { _timed_tasks[internal_task.task.starting_time_offset + now] = std::move(internal_task); }
+    else { _timed_tasks[internal_task.job.starting_time_offset + now] = std::move(internal_task); }
 }
 
 void pgf::TaskEngine::forceCheckTimedTasks()

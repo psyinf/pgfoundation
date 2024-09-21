@@ -21,7 +21,7 @@ struct Task
 
     // bool execute() { return task(); }
 
-    std::function<bool()> work; //< the task needs to return true if it was successful, false otherwise.
+    std::function<bool()> task; //< the task needs to return true if it was successful, false otherwise.
     bool                  reschedule_on_failure = false; //< if the task fails, should it be rescheduled?
     Duration              starting_time_offset{0ms};     //< delay before executing the task
     Duration              reschedule_delay{0ms};         //< delay before rescheduling the task
@@ -31,14 +31,14 @@ struct InternalTask
 {
     bool execute()
     {
-        if (!async) { return task.work(); }
+        if (!async) { return job.task(); }
         else
         {
             // check if we already started the work
             if (!fut.valid())
             {
                 // move the work to a shared future
-                fut = std::async(std::launch::async, [work = std::move(task.work)]() {
+                fut = std::async(std::launch::async, [work = std::move(job.task)]() {
                           // check the result of the work
                           bool res = work();
                           // if the job was successful, return true, and simply remove the task
@@ -61,7 +61,7 @@ struct InternalTask
                 else
                 {
                     // reset the future, move the original task back in, so we can reschedule it if needed
-                    task.work = std::move(res.second);
+                    job.task = std::move(res.second);
                     fut = {};
                 }
             }
@@ -70,7 +70,7 @@ struct InternalTask
         }
     }
 
-    Task           task;
+    Task           job;
     bool           async = false;
     Task::Duration async_check_duration{1ms};
 
