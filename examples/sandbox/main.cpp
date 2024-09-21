@@ -2,20 +2,30 @@
 #include <exception>
 
 #include <pgf/taskengine/TaskEngine.hpp>
+
 int main([[maybe_unused]] int argc, [[maybe_unused]] char** argv)
 try
 {
     pgf::TaskEngine taskEngine;
 
-    auto task2 = []() {
-        std::this_thread::sleep_for(std::chrono::milliseconds(500));
-        std::this_thread::sleep_for(std::chrono::milliseconds(5000));
-        std::cout << "done!" << std::endl;
-    };
-    taskEngine.addTask(std::move(task2), false, std::chrono::seconds(1), std::chrono::seconds(1));
-    // taskEngine.addTask(asyncTask, true, {}, {});
-    /// taskEngine.addTask(task2, true, {}, {});
-    taskEngine.addTask([]() { std::cout << "Hello, World!" << std::endl; });
+    // some task that returns false, so it will be rescheduled until a condition is met
+    taskEngine.addTask(
+        []() mutable {
+            static const auto start_time = std::chrono::high_resolution_clock::now();
+            auto              now = std::chrono::high_resolution_clock::now();
+            static int        count = 0;
+            if (now - start_time < std::chrono::seconds(1))
+            {
+                count++;
+                std::cout << ".";
+                return false;
+            }
+            std::cout << count << " done\n";
+            return true;
+        },
+        true,                            // reschedule on failure
+        std::chrono::milliseconds(1000), // time to wait before starting the task
+        std::chrono::milliseconds(0));   // time to wait before rescheduling the task
 
     taskEngine.wait();
 }
