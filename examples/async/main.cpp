@@ -5,8 +5,8 @@
 int main([[maybe_unused]] int argc, [[maybe_unused]] char** argv)
 try
 {
-    auto            config = pgf::TaskEngine::default_config().withStartImmediately(false);
-    pgf::TaskEngine taskEngine(std::move(config));
+    auto            config = pg::foundation::TaskEngine::default_config().withStartImmediately(false);
+    pg::foundation::TaskEngine taskEngine(std::move(config));
     taskEngine.addAsyncTask([]() { std::cout << "World!" << std::endl; }, false, std::chrono::milliseconds(6000));
     // an async task that returns false, so it will be rescheduled until a condition is met
     taskEngine.addAsyncTask(

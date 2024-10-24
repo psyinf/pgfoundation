@@ -1,7 +1,7 @@
 #include <pgf/taskengine/TaskEngine.hpp>
 #include <thread>
 
-void pgf::TaskEngine::run()
+void pg::foundation::TaskEngine::run()
 {
     while (!runner_thread.get_stop_token().stop_requested())
     {
@@ -26,7 +26,7 @@ void pgf::TaskEngine::run()
     }
 }
 
-void pgf::TaskEngine::stop()
+void pg::foundation::TaskEngine::stop()
 {
     std::lock_guard lk(_mutex);
     _tasks.clear();
@@ -34,20 +34,20 @@ void pgf::TaskEngine::stop()
     _task_available = false;
 }
 
-void pgf::TaskEngine::wait()
+void pg::foundation::TaskEngine::wait()
 {
     // wait for all tasks to finish
     std::unique_lock lk(_mutex);
     _cv.wait(lk, [this] { return _timed_tasks.empty() && _tasks.empty(); });
 }
 
-void pgf::TaskEngine::checkTimedTasks()
+void pg::foundation::TaskEngine::checkTimedTasks()
 {
     auto now = std::chrono::high_resolution_clock::now();
     checkTimedTasks(now);
 }
 
-void pgf::TaskEngine::checkTimedTasks(const Task::TimePoint& time)
+void pg::foundation::TaskEngine::checkTimedTasks(const Task::TimePoint& time)
 {
     // get all delayed task with deadline passed
     {
@@ -67,13 +67,13 @@ void pgf::TaskEngine::checkTimedTasks(const Task::TimePoint& time)
     if (_task_available) { _cv.notify_all(); }
 }
 
-pgf::TaskEngine::TaskEngine(Config&& config)
+pg::foundation::TaskEngine::TaskEngine(Config&& config)
   : _config(config)
 {
     if (_config.start_immediately) { start(); }
 }
 
-pgf::TaskEngine::~TaskEngine()
+pg::foundation::TaskEngine::~TaskEngine()
 {
     stop();
     runner_thread.request_stop();
@@ -84,12 +84,12 @@ pgf::TaskEngine::~TaskEngine()
     _check_thread.join();
 }
 
-void pgf::TaskEngine::addTask(Task&& task)
+void pg::foundation::TaskEngine::addTask(Task&& task)
 {
     addInternalTask(InternalTask{std::move(task)});
 }
 
-void pgf::TaskEngine::addInternalTask(InternalTask&& internal_task)
+void pg::foundation::TaskEngine::addInternalTask(InternalTask&& internal_task)
 {
     auto            now = std::chrono::high_resolution_clock::now();
     std::lock_guard lk(_mutex);
@@ -102,7 +102,7 @@ void pgf::TaskEngine::addInternalTask(InternalTask&& internal_task)
     else { _timed_tasks[internal_task.job.starting_time_offset + now] = std::move(internal_task); }
 }
 
-void pgf::TaskEngine::forceCheckTimedTasks()
+void pg::foundation::TaskEngine::forceCheckTimedTasks()
 {
     // get all delayed task with deadline passed
     const std::lock_guard lk(_mutex);
@@ -118,19 +118,19 @@ void pgf::TaskEngine::forceCheckTimedTasks()
     _cv.notify_one();
 }
 
-bool pgf::TaskEngine::hasTimedTasks() const
+bool pg::foundation::TaskEngine::hasTimedTasks() const
 {
     std::unique_lock lk(_mutex);
     return !_timed_tasks.empty();
 }
 
-void pgf::TaskEngine::addAsyncTask(Task&& task)
+void pg::foundation::TaskEngine::addAsyncTask(Task&& task)
 {
     InternalTask internal_task{std::move(task), true, _config.async_task_check_duration};
     addInternalTask(std::move(internal_task));
 }
 
-void pgf::TaskEngine::start()
+void pg::foundation::TaskEngine::start()
 {
     if (runner_thread.joinable()) { throw std::logic_error("TaskEngine is already running"); }
     runner_thread = std::jthread{&TaskEngine::run, this};

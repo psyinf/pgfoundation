@@ -5,7 +5,7 @@
 int main([[maybe_unused]] int argc, [[maybe_unused]] char** argv)
 try
 {
-    pgf::TaskEngine taskEngine;
+    pg::foundation::TaskEngine taskEngine;
 
     // some simple tasks  to be executed in order
     taskEngine.addTask([]() { std::cout << "Hello, "; });
