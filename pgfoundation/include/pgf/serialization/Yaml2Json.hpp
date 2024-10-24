@@ -7,7 +7,7 @@
  * Small helper facilities to transform YAML to JSON
  * IDEA: see https://github.com/mircodezorzi/tojson/blob/master/tojson.hpp
  **/
-namespace pgf {
+namespace pg::foundation {
 namespace internal {
 
 inline nlohmann::json parse_scalar(const YAML::Node& node)
@@ -50,4 +50,4 @@ inline nlohmann::json yaml2json(const YAML::Node& root)
     }
     return result_node;
 }
-} // namespace pgf
+} // namespace pg::foundation

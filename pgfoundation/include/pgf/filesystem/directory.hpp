@@ -3,7 +3,7 @@
 #include <filesystem>
 #include <vector>
 
-namespace pgf {
+namespace pg::foundation {
 
 static bool isLeafDirectory(const std::filesystem::path& dir)
 {
@@ -24,4 +24,4 @@ static std::vector<std::filesystem::path> getLeafSubDirectories(const std::files
     return subDirectories;
 }
 
-} // namespace pgf
+} // namespace pg::foundation

@@ -10,7 +10,7 @@
 #include <iostream>
 #endif
 // for now cheap parlor trick to enable VT100 on windows
-namespace miniAnsi {
+namespace pg::foundation::console {
 
 void setupConsole()
 {
@@ -37,4 +37,4 @@ inline void moveCursor(int x, int y)
 {
     std::cout << "\033[" << y << ";" << x << "H";
 }
-} // namespace miniAnsi
+} // namespace pg::foundation::console

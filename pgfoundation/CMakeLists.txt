@@ -16,7 +16,10 @@ target_sources(${PROJECT_NAME}
         "include/pgf/strings/StringTools.hpp"
         "include/pgf/strings/FixedLengthString.hpp"
         "include/pgf/filesystem/directory.hpp"
-
+        "include/pgf/caching/GenericFactory.hpp"
+        "include/pgf/caching/ResourceCache.hpp"
+        "include/pgf/caching/ResourceLocator.hpp"
+        "include/pgf/caching/ResourceManager.hpp"
   #  PRIVATE
 )
 target_include_directories(
