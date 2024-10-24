@@ -7,7 +7,7 @@
 #include <string>
 #include <format>
 
-namespace pg::foundation::strings {
+namespace pgf::strings {
 
 /**
  * String-like interface to an fixed length identifier. The \0 character is not included if the input is either only the
@@ -87,4 +87,4 @@ auto operator<=>(const FixedLengthString<L>& lhs, const FixedLengthString<L>& rh
     return lhs <=> std::string_view(rhs);
 }
 
-} // namespace pg::foundation::strings
+} // namespace pgf::strings

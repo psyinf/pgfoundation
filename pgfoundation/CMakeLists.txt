@@ -15,6 +15,7 @@ target_sources(${PROJECT_NAME}
         "include/pgf/console/miniAnsi.hpp"
         "include/pgf/strings/StringTools.hpp"
         "include/pgf/strings/FixedLengthString.hpp"
+        "include/pgf/filesystem/directory.hpp"
 
   #  PRIVATE
 )
