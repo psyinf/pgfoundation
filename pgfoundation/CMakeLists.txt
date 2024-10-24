@@ -8,10 +8,13 @@ add_library(${PROJECT_NAME}::${PROJECT_NAME} ALIAS ${PROJECT_NAME})
 target_sources(${PROJECT_NAME}
     PRIVATE
         "src/taskengine/TaskEngine.cpp"
+        "src/strings/StringTools.cpp"
     PUBLIC
         "include/pgf/taskengine/TaskEngine.hpp"
         "include/pgf/serialization/Yaml2Json.hpp"
         "include/pgf/console/miniAnsi.hpp"
+        "include/pgf/strings/StringTools.hpp"
+        "include/pgf/strings/FixedLengthString.hpp"
 
   #  PRIVATE
 )
