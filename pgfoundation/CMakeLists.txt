@@ -10,6 +10,9 @@ target_sources(${PROJECT_NAME}
         "src/taskengine/TaskEngine.cpp"
     PUBLIC
         "include/pgf/taskengine/TaskEngine.hpp"
+        "include/pgf/serialization/Yaml2Json.hpp"
+        "include/pgf/console/miniAnsi.hpp"
+
   #  PRIVATE
 )
 target_include_directories(
@@ -20,6 +23,8 @@ target_include_directories(
 target_link_libraries(
     ${PROJECT_NAME}
     PUBLIC
+    nlohmann_json::nlohmann_json
+    yaml-cpp::yaml-cpp
     PRIVATE
 )
 
