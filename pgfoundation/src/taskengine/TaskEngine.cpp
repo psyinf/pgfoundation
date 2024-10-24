@@ -1,4 +1,4 @@
-#include <pgf/taskEngine/TaskEngine.hpp>
+#include <pgf/taskengine/TaskEngine.hpp>
 #include <thread>
 
 void pgf::TaskEngine::run()

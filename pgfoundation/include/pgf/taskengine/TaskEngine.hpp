@@ -124,9 +124,9 @@ public:
         }
     };
 
-    static Config default_config() { return Config{}; };
+    static consteval Config default_config() { return Config{}; };
 
-    TaskEngine(Config&& cfg = {.periodic_check_duration{16ms}});
+    TaskEngine(Config&& cfg = default_config());
     void start();
 
     ~TaskEngine();
