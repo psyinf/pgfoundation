@@ -8,7 +8,6 @@
 #include <mutex>
 #include <thread>
 #include <future>
-#include <iostream>
 
 namespace pg::foundation {
 using namespace std::chrono_literals;

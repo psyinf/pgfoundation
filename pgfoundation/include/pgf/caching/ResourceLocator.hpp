@@ -1,6 +1,8 @@
 #pragma once
+#include <filesystem>
 
 namespace pg::foundation {
+
 class ResourceLocatorBase
 {
 public:
