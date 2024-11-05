@@ -2,8 +2,8 @@
 
 #include <memory>
 #include <string>
-#include <pgFoundation/caching/ResourceCache.hpp>
-#include <pgFoundation/caching/ResourceLocator.hpp>
+#include <pgf/caching/ResourceCache.hpp>
+#include <pgf/caching/ResourceLocator.hpp>
 
 namespace pg::foundation {
 
