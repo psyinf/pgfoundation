@@ -4,6 +4,7 @@
 #include <iostream>
 #include <map>
 #include <memory>
+#include <ranges>
 #include <string>
 #include <string_view>
 
@@ -15,12 +16,12 @@ class GenericFactory
 public:
     using CtorFunc = std::function<typename std::unique_ptr<typename std::remove_pointer_t<T>>(Arguments&&...)>;
 
+    // only value semantics for fixed parameters for now
     template <typename... FixedParameters>
-    static auto proto(FixedParameters&&... fixed)
+    static auto proto(FixedParameters... fixed)
     {
-        return [&fixed...](Arguments&&... args) {
-            return std::make_unique<T>(std::forward<Arguments>(args)..., std::forward<FixedParameters>(fixed)...);
-        };
+        return
+            [fixed...](Arguments&&... args) { return std::make_unique<T>(std::forward<Arguments>(args)..., fixed...); };
     }
 
     static auto proto()
