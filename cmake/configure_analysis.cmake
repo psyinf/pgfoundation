@@ -1,4 +1,4 @@
-if (CMAKE_CXX_COMPILER_ID STREQUAL "Clang" OR CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
+if ((CMAKE_CXX_COMPILER_ID STREQUAL "Clang" OR CMAKE_CXX_COMPILER_ID STREQUAL "GNU") AND CODE_COVERAGE )
 	include(cmake/cmake-coverage.cmake)
 else ()
 	message("No code coverage for ${CMAKE_CXX_COMPILER_ID}")
