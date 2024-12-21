@@ -56,3 +56,16 @@ CPMAddPackage(
     GIT_TAG v0.2.0
 )
 
+CPMAddPackage(
+	NAME nlohmann_json
+	GITHUB_REPOSITORY nlohmann/json
+	GIT_TAG v3.11.3
+)
+
+CPMAddPackage(
+    NAME yaml-cpp
+    GITHUB_REPOSITORY jbeder/yaml-cpp
+    GIT_TAG 0.8.0
+    OPTIONS
+    "YAML_CPP_BUILD_TESTS OFF"
+)

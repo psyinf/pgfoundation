@@ -8,8 +8,18 @@ add_library(${PROJECT_NAME}::${PROJECT_NAME} ALIAS ${PROJECT_NAME})
 target_sources(${PROJECT_NAME}
     PRIVATE
         "src/taskengine/TaskEngine.cpp"
+        "src/strings/StringTools.cpp"
     PUBLIC
         "include/pgf/taskengine/TaskEngine.hpp"
+        "include/pgf/serialization/Yaml2Json.hpp"
+        "include/pgf/console/miniAnsi.hpp"
+        "include/pgf/strings/StringTools.hpp"
+        "include/pgf/strings/FixedLengthString.hpp"
+        "include/pgf/filesystem/directory.hpp"
+        "include/pgf/caching/GenericFactory.hpp"
+        "include/pgf/caching/ResourceCache.hpp"
+        "include/pgf/caching/ResourceLocator.hpp"
+        "include/pgf/caching/ResourceManager.hpp"
   #  PRIVATE
 )
 target_include_directories(
@@ -20,6 +30,8 @@ target_include_directories(
 target_link_libraries(
     ${PROJECT_NAME}
     PUBLIC
+    nlohmann_json::nlohmann_json
+    yaml-cpp::yaml-cpp
     PRIVATE
 )
 

@@ -8,9 +8,8 @@
 #include <mutex>
 #include <thread>
 #include <future>
-#include <iostream>
 
-namespace pgf {
+namespace pg::foundation {
 using namespace std::chrono_literals;
 
 // a task to be executed by the tasked player, should be non-blocking and as fast as possible
@@ -218,4 +217,4 @@ private:
     std::jthread                            _check_thread;
 }; // namespace pgf
 
-} // namespace pgf
+} // namespace pg::foundation
