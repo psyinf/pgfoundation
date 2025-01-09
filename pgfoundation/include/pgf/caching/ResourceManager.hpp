@@ -2,68 +2,69 @@
 
 #include <memory>
 #include <string>
+#include <functional>
+
 #include <pgf/caching/ResourceCache.hpp>
-#include <pgf/caching/ResourceLocator.hpp>
+#include <pgf/caching/DataProvider.hpp>
 
 namespace pg::foundation {
 
 template <typename T>
-inline auto loadResource(const std::string& path) -> T
+inline auto loadResource(DataProvider& provider) -> T
 {
     static_assert(false, "No resource loader found for type T");
 }
 
 template <typename T, typename... Args>
-inline auto loadResource(const std::string& path, Args... args) -> T
+inline auto loadResource(DataProvider& provider, Args... args) -> T
 {
     static_assert(false, "No resource loader found for type T");
 }
 
-template <typename Locator>
+using DataProviderPtr = std::shared_ptr<DataProvider>;
+using DataProviderFactory = std::function<pg::foundation::DataProviderPtr(const std::string&)>;
+
+static constexpr auto DefaultDataProviderFactory = [](const std::string& uri) -> DataProviderPtr {
+    return std::make_unique<FileDataProvider>(uri);
+};
+
 class ResourceManager
 {
 public:
     ResourceManager() = default;
 
-    ResourceManager(Locator&& locator)
-      : _locator(locator)
+    ResourceManager(pg::foundation::DataProviderFactory providerFactory = DefaultDataProviderFactory) noexcept
+      : _providerFactory(providerFactory)
     {
     }
 
     template <class T>
     std::shared_ptr<T> load(const std::string& uri)
     {
-        if (!_locator.contains(uri)) { throw std::runtime_error("Locator does not contain uri"); }
-        auto path = (_locator.locate(uri)).string();
-        return _cache.retrieve<T>(uri, [path]([[maybe_unused]] const std::string& _) {
-            return std::move(pg::foundation::loadResource<T>(path));
+        return _cache.retrieve<T>(uri, [uri, p = _providerFactory](const std::string& _) {
+            return pg::foundation::loadResource<T>(*p(uri));
         });
     }
 
     template <class T, typename... Args>
     std::shared_ptr<T> load(const std::string& uri, Args&&... args)
     {
-        if (!_locator.contains(uri)) { throw std::runtime_error("Locator does not contain uri"); }
-        auto path = (_locator.locate(uri)).string();
-        return _cache.retrieve<T>(uri, [path, &args...]([[maybe_unused]] const std::string& _) {
-            return pg::foundation::loadResource<T, Args...>(path, std::forward<Args>(args)...);
+        return _cache.retrieve<T>(uri, [uri, p = _providerFactory, &args...]([[maybe_unused]] const std::string& _) {
+            return pg::foundation::loadResource<T, Args...>(*p(uri), std::forward<Args>(args)...);
         });
     }
 
-    Locator& getLocator() { return _locator; }
-
 private:
-    Locator                       _locator;
-    pg::foundation::ResourceCache _cache;
+    pg::foundation::DataProviderFactory _providerFactory;
+    pg::foundation::ResourceCache       _cache;
 };
 
-template <typename Locator>
 class ResourceManagerMonostate
 {
 public:
-    ResourceManager<Locator>& get() { return instance; };
+    ResourceManager& get() { return instance; };
 
 private:
-    static inline ResourceManager<Locator> instance{};
+    static inline ResourceManager instance{DefaultDataProviderFactory};
 };
 } // namespace pg::foundation
