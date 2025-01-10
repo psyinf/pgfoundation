@@ -22,10 +22,10 @@ inline auto loadResource(DataProvider& provider, Args... args) -> T
 }
 
 using DataProviderPtr = std::shared_ptr<DataProvider>;
-using DataProviderFactory = std::function<pg::foundation::DataProviderPtr(const std::string&)>;
+using DataProviderFactory = std::function<pg::foundation::DataProviderPtr(const URI&)>;
 
-static constexpr auto DefaultDataProviderFactory = [](const std::string& uri) -> DataProviderPtr {
-    return std::make_unique<FileDataProvider>(uri);
+static constexpr auto DefaultDataProviderFactory = [](const URI& uri) -> DataProviderPtr {
+    return std::make_unique<FileDataProvider>(uri, true);
 };
 
 class ResourceManager
@@ -39,7 +39,7 @@ public:
     }
 
     template <class T>
-    std::shared_ptr<T> load(const std::string& uri)
+    std::shared_ptr<T> load(const URI& uri)
     {
         return _cache.retrieve<T>(uri, [uri, p = _providerFactory](const std::string& _) {
             return pg::foundation::loadResource<T>(*p(uri));
@@ -47,7 +47,7 @@ public:
     }
 
     template <class T, typename... Args>
-    std::shared_ptr<T> load(const std::string& uri, Args&&... args)
+    std::shared_ptr<T> load(const URI& uri, Args&&... args)
     {
         return _cache.retrieve<T>(uri, [uri, p = _providerFactory, &args...]([[maybe_unused]] const std::string& _) {
             return pg::foundation::loadResource<T, Args...>(*p(uri), std::forward<Args>(args)...);

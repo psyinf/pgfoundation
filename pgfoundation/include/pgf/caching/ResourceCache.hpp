@@ -58,8 +58,6 @@ private:
 template <typename Resource, typename Maker = std::function<Resource(const URI&)>>
 class TypedResourceCache
 {
-    using URI = std::string;
-
 public:
     TypedResourceCache(Maker&& maker)
       : _maker(maker)

@@ -23,7 +23,7 @@ auto loadResource<ResourceA>(DataProvider& provider) -> ResourceA
 template <>
 ResourceA loadResource(DataProvider& provider, int x)
 {
-    return ResourceA{provider.getUri() + std::to_string(x)};
+    return ResourceA{provider.getUri().uri + std::to_string(x)};
 }
 
 } // namespace pg::foundation

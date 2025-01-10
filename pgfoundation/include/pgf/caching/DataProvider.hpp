@@ -1,11 +1,13 @@
 #pragma once
 #include <fstream>
 
+#include <pgf/caching/URI.hpp>
+
 namespace pg::foundation {
 class DataProvider
 {
 public:
-    DataProvider(const std::string& uri, const std::string& fileType = {})
+    DataProvider(const URI& uri)
       : _uri(uri)
     {
     }
@@ -19,13 +21,10 @@ public:
 
     virtual ~DataProvider() = default;
 
-    const virtual std::string& getUri() const { return _uri; }
-
-    const virtual std::string& getFileType() const { return _fileType; }
+    const virtual URI& getUri() const { return _uri; }
 
 private:
-    std::string _uri;
-    std::string _fileType;
+    URI _uri;
 };
 
 class FileDataProvider : public DataProvider
@@ -35,8 +34,8 @@ class FileDataProvider : public DataProvider
 public:
     using DataProvider::DataProvider;
 
-    FileDataProvider(const std::string& uri, const std::string& fileType = {}, bool autoOpen = false)
-      : DataProvider(uri, fileType)
+    FileDataProvider(const URI& uri, bool autoOpen = false)
+      : DataProvider(uri)
     {
         if (autoOpen) { open(); }
     }
@@ -61,7 +60,7 @@ public:
         return static_cast<char>(_file.get());
     }
 
-    virtual void open() override { _file = std::ifstream{getUri(), std::ios_base::binary}; }
+    virtual void open() override { _file = std::ifstream{getUri().uri, std::ios_base::binary}; }
 
     virtual void close() override { _file.close(); }
 };
