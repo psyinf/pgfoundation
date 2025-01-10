@@ -31,8 +31,6 @@ static constexpr auto DefaultDataProviderFactory = [](const URI& uri) -> DataPro
 class ResourceManager
 {
 public:
-    ResourceManager() = default;
-
     ResourceManager(pg::foundation::DataProviderFactory providerFactory = DefaultDataProviderFactory) noexcept
       : _providerFactory(providerFactory)
     {
