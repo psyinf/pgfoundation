@@ -20,6 +20,8 @@ target_sources(${PROJECT_NAME}
         "include/pgf/caching/ResourceCache.hpp"
         "include/pgf/caching/ResourceLocator.hpp"
         "include/pgf/caching/ResourceManager.hpp"
+        "include/pgf/caching/DataProvider.hpp"
+
   #  PRIVATE
 )
 target_include_directories(

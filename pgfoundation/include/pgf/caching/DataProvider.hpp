@@ -5,7 +5,7 @@ namespace pg::foundation {
 class DataProvider
 {
 public:
-    DataProvider(const std::string& uri)
+    DataProvider(const std::string& uri, const std::string& fileType = {})
       : _uri(uri)
     {
     }
@@ -21,8 +21,11 @@ public:
 
     const virtual std::string& getUri() const { return _uri; }
 
+    const virtual std::string& getFileType() const { return _fileType; }
+
 private:
     std::string _uri;
+    std::string _fileType;
 };
 
 class FileDataProvider : public DataProvider
