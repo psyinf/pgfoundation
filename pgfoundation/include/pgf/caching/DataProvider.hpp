@@ -35,11 +35,25 @@ class FileDataProvider : public DataProvider
 public:
     using DataProvider::DataProvider;
 
-    virtual std::istream& asStream() override { return _file; }
+    virtual std::istream& asStream() override
+    {
+        if (!_file.is_open()) { throw std::runtime_error("File not open"); }
+        return _file;
+    }
 
-    virtual void asBuffer(std::vector<char>& buffer, size_t max_ch) override { _file.read(buffer.data(), max_ch); }
+    virtual void asBuffer(std::vector<char>& buffer, size_t max_ch) override
+    {
+        throw std::runtime_error("Not implemented");
+        // TODO: get file size and resize buffer
+        // buffer.resize(file_size);
+        //_file.read(buffer.data(), max_ch); }
+    }
 
-    virtual char readNext() override { return static_cast<char>(_file.get()); }
+    virtual char readNext() override
+    {
+        if (!_file.is_open()) { throw std::runtime_error("File not open"); }
+        return static_cast<char>(_file.get());
+    }
 
     virtual void open() override { _file = std::ifstream{getUri(), std::ios_base::binary}; }
 
