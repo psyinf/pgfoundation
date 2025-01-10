@@ -35,6 +35,12 @@ class FileDataProvider : public DataProvider
 public:
     using DataProvider::DataProvider;
 
+    FileDataProvider(const std::string& uri, const std::string& fileType = {}, bool autoOpen = false)
+      : DataProvider(uri, fileType)
+    {
+        if (autoOpen) { open(); }
+    }
+
     virtual std::istream& asStream() override
     {
         if (!_file.is_open()) { throw std::runtime_error("File not open"); }
