@@ -4,14 +4,14 @@
 #include <string>
 #include <unordered_map>
 
-namespace pg::foundation {
-using URI = std::string;
+#include <pgf/caching/URI.hpp>
 
+namespace pg::foundation {
 /**
  * A generic resource cache that allows to pass factory function to create/load the specified resource.
  * Resources are stored using std::any to allow for different types of resources to be stored in the same cache
- * The context is passed to the maker function to allow for context-specific resource loading. E.g. this could be the
- * base path for the resources
+ * The context is passed to the maker function to allow for context-specific resource loading. E.g. this could be
+ * the base path for the resources
  */
 class ResourceCache
 {
