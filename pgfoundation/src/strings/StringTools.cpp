@@ -17,9 +17,7 @@ bool pg::foundation::strings::matches(const std::string& s, const std::string& p
     return std::regex_search(std::string(s), pattern_regex);
 }
 
-bool pg::foundation::strings::matchesWildCard(const std::string& s,
-                                              const std::string& wildcardPattern,
-                                              bool               caseSensitive /*  =true*/)
+bool pg::foundation::strings::matchesWildCard(const std::string& s, const std::string& wildcardPattern)
 {
     return std::regex_match(s, std::regex(wildcardToRegex(wildcardPattern)));
 }
