@@ -3,6 +3,7 @@
 
 #include <pgf/caching/URI.hpp>
 #include <span>
+#include <vector>
 
 namespace pg::foundation {
 class DataProvider
@@ -24,7 +25,7 @@ public:
 
     virtual ~DataProvider() = default;
 
-    virtual size_t size() = 0;
+    virtual size_t size() const = 0;
 
     const virtual URI& getUri() const { return _uri; }
 
@@ -78,7 +79,7 @@ public:
     virtual std::span<char> asSpan() override
     {
         if (!_file.is_open()) { throw std::runtime_error("File not open"); }
-        auto file_size = size();
+        auto                           file_size = size();
         thread_local std::vector<char> buffer;
         buffer.resize(file_size);
 
