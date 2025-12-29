@@ -1,6 +1,5 @@
 #pragma once
 #include <string>
-#include <hash>
 namespace pg::foundation {
 struct URI
 {
@@ -8,7 +7,7 @@ struct URI
 
     URI(std::string_view uri_str) { uri = uri_str; }
 
-    URI(const char* uri_str) { uri = {uri_str}; }
+    URI(const char* uri_str) { uri = uri_str; }
 
     operator std::string() const { return uri; };
 

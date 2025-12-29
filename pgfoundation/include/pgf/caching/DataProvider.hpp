@@ -79,8 +79,9 @@ public:
     {
         if (!_file.is_open()) { throw std::runtime_error("File not open"); }
         auto file_size = size();
+        thread_local std::vector<char> buffer;
+        buffer.resize(file_size);
 
-        std::vector<char> buffer(file_size);
         _file.read(buffer.data(), file_size);
         return std::span<char>(buffer);
     }
@@ -95,7 +96,7 @@ public:
 
     virtual void close() override { _file.close(); }
 
-    virtual size_t size()
+    virtual size_t size() override
     {
         if (!_file.is_open()) { throw std::runtime_error("File not open"); }
         _file.seekg(0, std::ios_base::end);

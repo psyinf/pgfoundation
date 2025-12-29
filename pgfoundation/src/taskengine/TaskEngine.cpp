@@ -86,7 +86,7 @@ pg::foundation::TaskEngine::~TaskEngine()
 
 void pg::foundation::TaskEngine::addTask(Task&& task)
 {
-    addInternalTask(InternalTask{std::move(task)});
+    addInternalTask(InternalTask{std::move(task), false, {}, {}});
 }
 
 void pg::foundation::TaskEngine::addInternalTask(InternalTask&& internal_task)
@@ -126,7 +126,7 @@ bool pg::foundation::TaskEngine::hasTimedTasks() const
 
 void pg::foundation::TaskEngine::addAsyncTask(Task&& task)
 {
-    InternalTask internal_task{std::move(task), true, _config.async_task_check_duration};
+    InternalTask internal_task{std::move(task), true, _config.async_task_check_duration, {}};
     addInternalTask(std::move(internal_task));
 }
 

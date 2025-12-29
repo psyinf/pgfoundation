@@ -20,10 +20,10 @@ struct Task
 
     // bool execute() { return task(); }
 
-    std::function<bool()> task; //< the task needs to return true if it was successful, false otherwise.
-    bool                  reschedule_on_failure = false; //< if the task fails, should it be rescheduled?
-    Duration              starting_time_offset{0ms};     //< delay before executing the task
-    Duration              reschedule_delay{0ms};         //< delay before rescheduling the task
+    std::function<bool()> task; //!< the task needs to return true if it was successful, false otherwise.
+    bool                  reschedule_on_failure = false; //!< if the task fails, should it be rescheduled?
+    Duration              starting_time_offset{0ms};     //!< delay before executing the task
+    Duration              reschedule_delay{0ms};         //!< delay before rescheduling the task
 };
 
 struct InternalTask
@@ -100,8 +100,8 @@ public:
         // periodically check for timed tasks. If set to 0, no periodic check will be performed and timed tasks will
         // only be handled by manually calling checkTimedTasks()
         Duration periodic_check_duration{16ms};
-        Duration async_task_check_duration{1ms}; //< wait time for async tasks to be checked for completion.
-        bool     start_immediately = true;       //< start the task engine immediately, else start() needs to be called
+        Duration async_task_check_duration{1ms}; //!< wait time for async tasks to be checked for completion.
+        bool     start_immediately = true;       //!< start the task engine immediately, else start() needs to be called
 
         // monadic
         Config& withPeriodicCheckDuration(Duration duration)
@@ -123,7 +123,7 @@ public:
         }
     };
 
-    static consteval Config default_config() { return Config{}; };
+    static consteval Config default_config() { return Config{}; }
 
     TaskEngine(Config&& cfg = default_config());
     void start();
@@ -141,8 +141,8 @@ public:
         constexpr bool is_void = std::is_same_v<decltype(f()), void>;
         if constexpr (is_void)
         {
-            addTask({[f = std::move(f)]() {
-                         f();
+            addTask({[func = std::move(f)]() {
+                         func();
                          return true;
                      },
                      reschedule_on_failure,
@@ -169,8 +169,8 @@ public:
         constexpr bool is_void = std::is_same_v<decltype(f()), void>;
         if constexpr (is_void)
         {
-            addAsyncTask({[f = std::move(f)]() {
-                              f();
+            addAsyncTask({[func = std::move(f)]() {
+                              func();
                               return true;
                           },
                           reschedule_on_failure,
@@ -208,13 +208,14 @@ private:
     void run();
 
     mutable std::mutex                      _mutex;
-    std::condition_variable                 _cv; //< used to notify the engine that a new task is available
-    bool                                    _task_available = false; //< flag to signal that a new task is available
-    std::deque<InternalTask>                _tasks;                  //< synchronous tasks to be executed
-    std::map<Task::TimePoint, InternalTask> _timed_tasks;            //< tasks to be executed at a specific time
+    std::condition_variable                 _cv; //!< used to notify the engine that a new task is available
+    bool                                    _task_available = false; //!< flag to signal that a new task is available
+    std::deque<InternalTask>                _tasks;                  //!< synchronous tasks to be executed
+    std::map<Task::TimePoint, InternalTask> _timed_tasks;            //!< tasks to be executed at a specific time
     Config                                  _config{};
     std::jthread                            runner_thread;
     std::jthread                            _check_thread;
 }; // namespace pgf
 
 } // namespace pg::foundation
+
