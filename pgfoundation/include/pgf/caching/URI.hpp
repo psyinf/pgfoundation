@@ -1,5 +1,6 @@
 #pragma once
-
+#include <string>
+#include <hash>
 namespace pg::foundation {
 struct URI
 {
@@ -20,7 +21,7 @@ struct URI
 
 namespace std {
 template <>
-struct std::hash<pg::foundation::URI>
+struct hash<pg::foundation::URI>
 {
     size_t operator()(const pg::foundation::URI& u) const
     {
