@@ -35,7 +35,7 @@ private:
 
 class FileDataProvider : public DataProvider
 {
-    std::ifstream _file;
+    mutable std::ifstream _file;
 
 public:
     using DataProvider::DataProvider;
@@ -97,12 +97,13 @@ public:
 
     virtual void close() override { _file.close(); }
 
-    virtual size_t size() override
+    virtual size_t size() const override
     {
         if (!_file.is_open()) { throw std::runtime_error("File not open"); }
+        auto current_pos = _file.tellg();
         _file.seekg(0, std::ios_base::end);
         auto size = _file.tellg();
-        _file.seekg(0, std::ios_base::beg);
+        _file.seekg(current_pos, std::ios_base::beg);
         return size;
     }
 
